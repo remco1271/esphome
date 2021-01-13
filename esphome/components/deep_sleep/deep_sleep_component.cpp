@@ -44,6 +44,32 @@ void DeepSleepComponent::set_wakeup_pin_mode(WakeupPinMode wakeup_pin_mode) {
   this->wakeup_pin_mode_ = wakeup_pin_mode;
 }
 void DeepSleepComponent::set_ext1_wakeup(Ext1Wakeup ext1_wakeup) { this->ext1_wakeup_ = ext1_wakeup; }
+
+
+/*
+  Handle an interrupt triggered when a pad is touched.
+  Recognize what pad has been touched and save it in a table.
+ */
+static void tp_example_rtc_intr(void *arg)
+{
+    //clear interrupt
+    ESP_LOGW(TAG, "Touch Pressed clearing interupt");
+    touch_pad_clear_status();
+}
+
+void set_touch_wakeup(bool enable){
+  if(enable == true){
+    // If use interrupt trigger mode, should set touch sensor FSM mode at 'TOUCH_FSM_MODE_TIMER'.
+    ESP_LOGW(TAG, "Set Touch fsm Mode");
+    touch_pad_set_fsm_mode(TOUCH_FSM_MODE_TIMER);
+    // Register touch interrupt ISR
+    ESP_LOGW(TAG, "Register TouchPad isr");
+    touch_pad_isr_register(tp_example_rtc_intr, NULL);
+    //interrupt mode, enable touch interrupt
+    ESP_LOGW(TAG, "Enabled interupt for touch");
+    touch_pad_intr_enable();
+  }
+}
 #endif
 void DeepSleepComponent::set_run_duration(uint32_t time_ms) { this->run_duration_ = time_ms; }
 void DeepSleepComponent::begin_sleep(bool manual) {

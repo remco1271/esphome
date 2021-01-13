@@ -2,7 +2,7 @@ import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome import pins, automation
 from esphome.const import CONF_ID, CONF_MODE, CONF_NUMBER, CONF_PINS, CONF_RUN_CYCLES, \
-    CONF_RUN_DURATION, CONF_SLEEP_DURATION, CONF_WAKEUP_PIN
+    CONF_RUN_DURATION, CONF_SLEEP_DURATION, CONF_WAKEUP_PIN, CONF_WAKEUP_PIN_MODE
 
 
 def validate_pin_number(value):
@@ -34,6 +34,7 @@ EXT1_WAKEUP_MODES = {
 
 CONF_WAKEUP_PIN_MODE = 'wakeup_pin_mode'
 CONF_ESP32_EXT1_WAKEUP = 'esp32_ext1_wakeup'
+CONF_TOUCH_WAKEUP_ENABLE = 'touch_enable'
 
 CONFIG_SCHEMA = cv.Schema({
     cv.GenerateID(): cv.declare_id(DeepSleepComponent),
@@ -44,6 +45,7 @@ CONFIG_SCHEMA = cv.Schema({
                                          validate_pin_number),
     cv.Optional(CONF_WAKEUP_PIN_MODE): cv.All(cv.only_on_esp32,
                                               cv.enum(WAKEUP_PIN_MODES), upper=True),
+    cv.Optional(CONF_TOUCH_WAKEUP_ENABLE, default=False): cv.boolean,
     cv.Optional(CONF_ESP32_EXT1_WAKEUP): cv.All(cv.only_on_esp32, cv.Schema({
         cv.Required(CONF_PINS): cv.ensure_list(pins.shorthand_input_pin, validate_pin_number),
         cv.Required(CONF_MODE): cv.enum(EXT1_WAKEUP_MODES, upper=True),
@@ -68,6 +70,8 @@ def to_code(config):
         cg.add(var.set_wakeup_pin_mode(config[CONF_WAKEUP_PIN_MODE]))
     if CONF_RUN_DURATION in config:
         cg.add(var.set_run_duration(config[CONF_RUN_DURATION]))
+    if CONF_TOUCH_WAKEUP_ENABLE in config:
+        cg.add(var.set_touch_wakeup(config[CONF_WAKEUP_PIN_MODE]))
 
     if CONF_ESP32_EXT1_WAKEUP in config:
         conf = config[CONF_ESP32_EXT1_WAKEUP]

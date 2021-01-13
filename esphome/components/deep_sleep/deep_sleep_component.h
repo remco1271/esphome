@@ -52,6 +52,9 @@ class DeepSleepComponent : public Component {
   void set_wakeup_pin_mode(WakeupPinMode wakeup_pin_mode);
 
   void set_ext1_wakeup(Ext1Wakeup ext1_wakeup);
+
+  void set_touch_wakeup(bool enable);
+  static void tp_example_rtc_intr(void *arg);
 #endif
   /// Set a duration in ms for how long the code should run before entering deep sleep mode.
   void set_run_duration(uint32_t time_ms);
@@ -69,6 +72,7 @@ class DeepSleepComponent : public Component {
 
  protected:
   optional<uint64_t> sleep_duration_;
+
 #ifdef ARDUINO_ARCH_ESP32
   optional<GPIOPin *> wakeup_pin_;
   WakeupPinMode wakeup_pin_mode_{WAKEUP_PIN_MODE_IGNORE};
