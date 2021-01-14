@@ -15,11 +15,24 @@ void DeepSleepComponent::setup() {
 
   if (this->run_duration_.has_value())
     this->set_timeout(*this->run_duration_, [this]() { this->begin_sleep(); });
-
-  if(TouchWakeup){
+}
+void DeepSleepComponent::dump_config() {
+  ESP_LOGCONFIG(TAG, "Setting up Deep Sleep...");
+  if (this->sleep_duration_.has_value()) {
+    uint32_t duration = *this->sleep_duration_ / 1000;
+    ESP_LOGCONFIG(TAG, "  Sleep Duration: %u ms", duration);
+  }
+  if (this->run_duration_.has_value()) {
+    ESP_LOGCONFIG(TAG, "  Run Duration: %u ms", *this->run_duration_);
+  }
+#ifdef ARDUINO_ARCH_ESP32
+  if (this->wakeup_pin_.has_value()) {
+    LOG_PIN("  Wakeup Pin: ", *this->wakeup_pin_);
+  }
+  if(TouchWakeup == true){
     // If use interrupt trigger mode, should set touch sensor FSM mode at 'TOUCH_FSM_MODE_TIMER'.
     ESP_LOGW(TAG, "Set Touch fsm Mode");
-    touch_pad_set_fsm_mode(TOUCH_FSM_MODE_TIMER);
+    //touch_pad_set_fsm_mode(TOUCH_FSM_MODE_TIMER);
     // Register touch interrupt ISR
     //ESP_LOGW(TAG, "Register TouchPad isr");
     //touch_pad_isr_register(tp_example_rtc_intr, NULL);
@@ -44,7 +57,7 @@ void DeepSleepComponent::setup() {
   }else{
     // If use interrupt trigger mode, should set touch sensor FSM mode at 'TOUCH_FSM_MODE_TIMER'.
     ESP_LOGW(TAG, "SLEEP FALSE Set Touch fsm Mode");
-    touch_pad_set_fsm_mode(TOUCH_FSM_MODE_TIMER);
+    //touch_pad_set_fsm_mode(TOUCH_FSM_MODE_TIMER);
     // Register touch interrupt ISR
     //ESP_LOGW(TAG, "Register TouchPad isr");
     //touch_pad_isr_register(tp_example_rtc_intr, NULL);
@@ -66,20 +79,6 @@ void DeepSleepComponent::setup() {
     default:
       break;
     }
-  }
-}
-void DeepSleepComponent::dump_config() {
-  ESP_LOGCONFIG(TAG, "Setting up Deep Sleep...");
-  if (this->sleep_duration_.has_value()) {
-    uint32_t duration = *this->sleep_duration_ / 1000;
-    ESP_LOGCONFIG(TAG, "  Sleep Duration: %u ms", duration);
-  }
-  if (this->run_duration_.has_value()) {
-    ESP_LOGCONFIG(TAG, "  Run Duration: %u ms", *this->run_duration_);
-  }
-#ifdef ARDUINO_ARCH_ESP32
-  if (this->wakeup_pin_.has_value()) {
-    LOG_PIN("  Wakeup Pin: ", *this->wakeup_pin_);
   }
 #endif
 }
