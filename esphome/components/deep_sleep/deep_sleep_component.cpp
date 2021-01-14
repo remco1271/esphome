@@ -68,6 +68,21 @@ void set_touch_wakeup(bool enable){
     //interrupt mode, enable touch interrupt
     ESP_LOGW(TAG, "Enabled interupt for touch");
     touch_pad_intr_enable();
+    esp_err_t sleepErrorInit = esp_sleep_enable_touchpad_wakeup();
+    switch (sleepErrorInit)
+    {
+    case ESP_OK:
+      ESP_LOGW(TAG, "ESP32 Touch wakeup has been set");
+      break;
+    case ESP_ERR_NOT_SUPPORTED:
+      ESP_LOGW(TAG, "touch (CONFIG_ESP32_RTC_EXT_CRYST_ADDIT_CURRENT) is enabled.");
+      break;
+    case ESP_ERR_INVALID_STATE:
+      ESP_LOGW(TAG, "wakeup triggers conflict for Touch Wakeup");
+      break;
+    default:
+      break;
+    }
   }
 }
 #endif
