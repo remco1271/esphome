@@ -54,7 +54,7 @@ class DeepSleepComponent : public Component {
   void set_ext1_wakeup(Ext1Wakeup ext1_wakeup);
 
   void set_touch_wakeup(bool enable);
-  static void tp_example_rtc_intr(void *arg);
+  
 #endif
   /// Set a duration in ms for how long the code should run before entering deep sleep mode.
   void set_run_duration(uint32_t time_ms);
@@ -82,6 +82,8 @@ class DeepSleepComponent : public Component {
   bool next_enter_deep_sleep_{false};
   bool prevent_{false};
 };
+
+static void tp_example_rtc_intr(void *arg);
 
 extern bool global_has_deep_sleep;
 
