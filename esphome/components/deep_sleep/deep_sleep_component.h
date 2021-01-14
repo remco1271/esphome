@@ -77,6 +77,7 @@ class DeepSleepComponent : public Component {
   optional<GPIOPin *> wakeup_pin_;
   WakeupPinMode wakeup_pin_mode_{WAKEUP_PIN_MODE_IGNORE};
   optional<Ext1Wakeup> ext1_wakeup_;
+  bool TouchWakeup;
 #endif
   optional<uint32_t> run_duration_;
   bool next_enter_deep_sleep_{false};

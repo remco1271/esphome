@@ -30,30 +30,6 @@ void ESP32TouchComponent::setup() {
     // Disable interrupt threshold
     touch_pad_config(child->get_touch_pad(), 0);
   }
-
-  ESP_LOGW(TAG, "Set Touch fsm Mode");
-    touch_pad_set_fsm_mode(TOUCH_FSM_MODE_TIMER);
-    // Register touch interrupt ISR
-    ESP_LOGW(TAG, "Register TouchPad isr");
-    touch_pad_isr_register(tp_example_rtc_intr, NULL);
-    //interrupt mode, enable touch interrupt
-    ESP_LOGW(TAG, "Enabled interupt for touch");
-    touch_pad_intr_enable();
-    esp_err_t sleepErrorInit = esp_sleep_enable_touchpad_wakeup();
-    switch (sleepErrorInit)
-    {
-    case ESP_OK:
-      ESP_LOGW(TAG, "ESP32 Touch wakeup has been set");
-      break;
-    case ESP_ERR_NOT_SUPPORTED:
-      ESP_LOGW(TAG, "touch (CONFIG_ESP32_RTC_EXT_CRYST_ADDIT_CURRENT) is enabled.");
-      break;
-    case ESP_ERR_INVALID_STATE:
-      ESP_LOGW(TAG, "wakeup triggers conflict for Touch Wakeup");
-      break;
-    default:
-      break;
-    }
 }
 
 void ESP32TouchComponent::dump_config() {
