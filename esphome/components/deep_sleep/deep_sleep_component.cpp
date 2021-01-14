@@ -56,7 +56,10 @@ void DeepSleepComponent::dump_config() {
     }
   }else{
     // If use interrupt trigger mode, should set touch sensor FSM mode at 'TOUCH_FSM_MODE_TIMER'.
+    esp_chip_info_t chip_info;
+    esp_chip_info(&chip_info);
     ESP_LOGW(TAG, "SLEEP FALSE Set Touch fsm Mode");
+    ESP_LOGW("ESP REV", "silicon revision %d, ", chip_info.revision);
     //touch_pad_set_fsm_mode(TOUCH_FSM_MODE_TIMER);
     // Register touch interrupt ISR
     //ESP_LOGW(TAG, "Register TouchPad isr");
