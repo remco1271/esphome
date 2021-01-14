@@ -50,14 +50,14 @@ void DeepSleepComponent::set_ext1_wakeup(Ext1Wakeup ext1_wakeup) { this->ext1_wa
   Handle an interrupt triggered when a pad is touched.
   Recognize what pad has been touched and save it in a table.
  */
-static void tp_example_rtc_intr(void *arg)
+static void DeepSleepComponent::tp_example_rtc_intr(void *arg)
 {
     //clear interrupt
     ESP_LOGW(TAG, "Touch Pressed clearing interupt");
     touch_pad_clear_status();
 }
 
-void set_touch_wakeup(bool enable){
+void DeepSleepComponent::set_touch_wakeup(bool enable){
   if(enable == true){
     // If use interrupt trigger mode, should set touch sensor FSM mode at 'TOUCH_FSM_MODE_TIMER'.
     ESP_LOGW(TAG, "Set Touch fsm Mode");
