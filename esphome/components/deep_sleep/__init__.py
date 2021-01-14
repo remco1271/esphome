@@ -71,7 +71,7 @@ def to_code(config):
     if CONF_RUN_DURATION in config:
         cg.add(var.set_run_duration(config[CONF_RUN_DURATION]))
     if CONF_TOUCH_WAKEUP_ENABLE in config:
-        cg.add(var.set_touch_wakeup(config[CONF_WAKEUP_PIN_MODE]))
+        cg.add(var.set_touch_wakeup(config[CONF_TOUCH_WAKEUP_ENABLE]))
 
     if CONF_ESP32_EXT1_WAKEUP in config:
         conf = config[CONF_ESP32_EXT1_WAKEUP]
